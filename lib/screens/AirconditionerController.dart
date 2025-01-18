@@ -32,7 +32,7 @@ class _AirConditionControlState extends State<AirConditionControl> {
       case "Warm":
         return Colors.redAccent; // Rouge foncé
       case "Heat":
-        return Colors.deepOrange; // Beaurdeau
+        return const Color.fromARGB(255, 169, 11, 11); // Beaurdeau
       default:
         return Colors.transparent;
     }
@@ -234,12 +234,7 @@ class _AirConditionControlState extends State<AirConditionControl> {
                   isSelected: getMood() == "Heat",
                   color: getMoodColor("Heat"),
                 ),
-                MoodButton(
-                  icon: Icons.wb_sunny,
-                  label: "Warm",
-                  isSelected: getMood() == "Warm",
-                  color: getMoodColor("Warm"),
-                ),
+                
               ],
             ),
             SizedBox(height: 20),

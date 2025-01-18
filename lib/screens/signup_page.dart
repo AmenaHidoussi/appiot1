@@ -26,15 +26,53 @@ class _SignupPageState extends State<SignUpPage> {
   }
 
   Future<void> _signup() async {
-    final user =
-        await _auth.createUserWithEmailAndPassword(_email.text, _password.text);
+  try {final user =
+      await _auth.createUserWithEmailAndPassword(_email.text, _password.text);
+        await showDialog(
+      // ignore: use_build_context_synchronously
+      context: context,
+      builder: (context) => AlertDialog(
+        title:  Row(
+      children: [
+        Icon(Icons.check_circle, color: Colors.green), // Icône de succès
+        SizedBox(width: 8), // Espacement entre l'icône et le texte
+        Text("Success",
+        style: TextStyle(color: Colors.green, fontWeight: FontWeight.w700)), // Titre du dialogue
+      ],
+    ),
+        content: const Text("User Created With Success"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
 
-    if (user != null) {
-      showDialog(
+    // Redirige vers SigninPage après une connexion réussie
+    Navigator.push(
+      // ignore: use_build_context_synchronously
+      context,
+      MaterialPageRoute(builder: (context) => const SigninPage()),
+    );
+  }
+  catch (e)
+  {
+     await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Success"),
-          content: const Text("User Created With Success"),
+          title:  Row(
+      children: [
+        Icon(Icons.error, color: Colors.red), // Icône d'erreur
+        SizedBox(width: 8), // Espacement entre l'icône et le texte
+         Text(
+          "Error", // Titre de l'alerte
+          style: TextStyle(color: Colors.red, fontWeight: FontWeight.w700), // Texte rouge
+        ),
+      ],
+    ),
+          content: Text(e.toString()), // Affiche l'erreur Firebase
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -43,13 +81,12 @@ class _SignupPageState extends State<SignUpPage> {
           ],
         ),
       );
-      // Redirige vers HomePage après une connexion réussie
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    }
+
   }
+  
+  
+  
+}
 
   @override
   Widget build(BuildContext context) {

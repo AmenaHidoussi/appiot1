@@ -13,21 +13,41 @@ class AuthService {
       return cred.user;
     } catch (e) {
       log("Something went wrong");
+      return null;
     }
-    return null;
   }
 
-  Future<User?> loginUserWithEmailAndPassword(
-      String email, String password) async {
-    try {
-      final cred = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
+ Future<User?> loginUserWithEmailAndPassword(
+  String email, String password) async {
+  try {
+    final cred = await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+
+    if (cred.user != null) {
+      // Affichage des détails de l'utilisateur après une connexion réussie
+      print("User authenticated: ${cred.user!.uid}");
+      print("Email: ${cred.user!.email}");
+      print("User display name: ${cred.user!.displayName ?? 'No display name'}");
+      // Vérification du type d'objets supplémentaires que vous récupérez
+     
       return cred.user;
-    } catch (e) {
-      log("Something went wrong");
+    } else {
+      print("User is null after sign-in");
+      return null;
     }
+  } catch (e) {
+    // Affichage de l'erreur
+    print("Erreur lors de la connexion : $e");
+
+    // Si l'exception contient des informations supplémentaires
+    if (e is FirebaseAuthException) {
+      print("Firebase error code: ${e.code}");
+      print("Firebase error message: ${e.message}");
+    }
+
     return null;
   }
+}
 
   Future<void> signout() async {
     try {
